@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+
+<title>AURIA PRIVATE CINEMATIC VAULT</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--bg:#050510;
+--pink:#ff4da6;
+--cyan:#00e5ff;
+--purple:#7c3aed;
+--glass:rgba(255,255,255,.08);
+--border:rgba(255,255,255,.15);
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+background:#050510;
+overflow:hidden;
+color:white;
+font-family:'Poppins',sans-serif;
+min-height:100vh;
+}
+
+#galaxy{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-5;
+background:
+radial-gradient(circle at 20% 20%,#32105c 0%,transparent 30%),
+radial-gradient(circle at 80% 30%,#1d2b64 0%,transparent 35%),
+radial-gradient(circle at 50% 80%,#500050 0%,transparent 35%),
+#050510;
+}
+
+#stars{
+position:fixed;
+inset:0;
+z-index:-4;
+overflow:hidden;
+}
+
+.star{
+position:absolute;
+background:white;
+border-radius:50%;
+animation:twinkle linear infinite;
+}
+
+@keyframes twinkle{
+0%{opacity:.2}
+50%{opacity:1}
+100%{opacity:.2}
+}
+
+.page{
+display:none;
+width:100%;
+height:100vh;
+padding:25px;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+text-align:center;
+}
+
+.page.active{
+display:flex;
+}
+
+.glass{
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.1);
+border-radius:30px;
+padding:30px;
+width:100%;
+max-width:430px;
+box-shadow:
+0 0 30px rgba(0,229,255,.15),
+0 0 60px rgba(255,77,166,.15);
+}
+
+.logo{
+font-family:'Cinzel',serif;
+font-size:2rem;
+font-weight:900;
+letter-spacing:2px;
+margin-bottom:10px;
+background:linear-gradient(90deg,#fff,#ff9ed1);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.subtitle{
+color:#cfcfcf;
+font-size:.9rem;
+line-height:1.7;
+margin-top:10px;
+}
+
+.loader{
+width:100%;
+height:8px;
+background:rgba(255,255,255,.08);
+border-radius:20px;
+margin-top:25px;
+overflow:hidden;
+}
+
+.loader-fill{
+width:0%;
+height:100%;
+background:linear-gradient(90deg,var(--cyan),var(--pink));
+box-shadow:0 0 20px var(--pink);
+}
+
+.pin-title{
+font-family:'Cinzel',serif;
+font-size:1.8rem;
+margin-bottom:15px;
+}
+
+.pin-dots{
+display:flex;
+justify-content:center;
+gap:12px;
+margin:20px 0;
+}
+
+.pin-dot{
+width:16px;
+height:16px;
+border-radius:50%;
+border:2px solid rgba(255,255,255,.4);
+transition:.3s;
+}
+
+.pin-dot.active{
+background:var(--pink);
+border-color:var(--pink);
+box-shadow:0 0 15px var(--pink);
+}
+
+.keypad{
+display:grid;
+grid-template-columns:repeat(3,80px);
+gap:12px;
+justify-content:center;
+margin-top:20px;
+}
+
+.key{
+width:80px;
+height:80px;
+border-radius:50%;
+border:1px solid rgba(255,255,255,.15);
+background:rgba(255,255,255,.05);
+color:white;
+font-size:1.3rem;
+cursor:pointer;
+transition:.2s;
+}
+
+.key:active{
+transform:scale(.92);
+background:var(--cyan);
+color:black;
+}
+
+.neon-btn{
+padding:14px 30px;
+border:none;
+border-radius:40px;
+background:linear-gradient(90deg,var(--pink),#ff0066);
+color:white;
+font-weight:600;
+cursor:pointer;
+margin-top:20px;
+box-shadow:0 0 20px rgba(255,77,166,.5);
+}
+
+.audio-btn{
+position:fixed;
+top:20px;
+right:20px;
+width:55px;
+height:55px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,.4);
+backdrop-filter:blur(15px);
+border:1px solid rgba(255,255,255,.1);
+z-index:999;
+font-size:22px;
+cursor:pointer;
+}
+
+</style>
+</head>
+<body>
+
+<div id="galaxy"></div>
+<div id="stars"></div>
+
+<div class="audio-btn" onclick="toggleMusic()">
+🎵
+</div>
+
+<audio id="bgm" loop>
+<source src="suarahati.mp3" type="audio/mp3">
+</audio>
+
+<!-- ========================= -->
+<!-- LOADING PAGE -->
+<!-- ========================= -->
+
+<section class="page active" id="loadingPage">
+
+<div class="glass">
+
+<div class="logo">
+AURIA
+</div>
+
+<h2 class="pin-title">
+PRIVATE CINEMATIC VAULT
+</h2>
+
+<p class="subtitle">
+Initializing private access...
+<br>
+Loading encrypted memories...
+</p>
+
+<div class="loader">
+<div class="loader-fill" id="loaderFill"></div>
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- PIN PAGE -->
+<!-- ========================= -->
+
+<section class="page" id="pinPage">
+
+<div class="glass">
+
+<h2 class="pin-title">
+🔐 ACCESS REQUIRED
+</h2>
+
+<p class="subtitle">
+Masukkan kode akses rahasia untuk membuka vault pribadi.
+</p>
+
+<div class="pin-dots">
+<div class="pin-dot"></div>
+<div class="pin-dot"></div>
+<div class="pin-dot"></div>
+<div class="pin-dot"></div>
+<div class="pin-dot"></div>
+<div class="pin-dot"></div>
+</div>
+
+<div class="keypad">
+
+<button class="key" onclick="addPin('1')">1</button>
+<button class="key" onclick="addPin('2')">2</button>
+<button class="key" onclick="addPin('3')">3</button>
+
+<button class="key" onclick="addPin('4')">4</button>
+<button class="key" onclick="addPin('5')">5</button>
+<button class="key" onclick="addPin('6')">6</button>
+
+<button class="key" onclick="addPin('7')">7</button>
+<button class="key" onclick="addPin('8')">8</button>
+<button class="key" onclick="addPin('9')">9</button>
+
+<button class="key" onclick="clearPin()">
+⌫
+</button>
+
+<button class="key" onclick="addPin('0')">
+0
+</button>
+
+<div></div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- VAULT HUB -->
+<!-- ========================= -->
+
+<section class="page" id="vaultPage">
+
+<div class="glass vault-box">
+
+<h2 class="pin-title">
+❤️ PRIVATE VAULT
+</h2>
+
+<p class="subtitle">
+Geser atau ketuk item untuk membuka memori rahasia.
+</p>
+
+<div class="orbit-scene">
+
+<div class="crystal-heart">
+❤️
+</div>
+
+<div class="orbit-ring">
+
+<div class="orbit-item" data-target="video1Modal">
+🎬
+<span>Video 1</span>
+</div>
+
+<div class="orbit-item" data-target="video2Modal">
+🎥
+<span>Video 2</span>
+</div>
+
+<div class="orbit-item" data-target="photoModal">
+📸
+<span>Photo</span>
+</div>
+
+<div class="orbit-item" data-target="letterModal">
+💌
+<span>Letter</span>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- VIDEO 1 -->
+<!-- ========================= -->
+
+<div class="modal" id="video1Modal">
+
+<div class="modal-content">
+
+<button class="close-btn" onclick="closeModal('video1Modal')">
+✕
+</button>
+
+<h2 class="modal-title">
+🎬 Kata Zahin
+</h2>
+
+<video
+class="vault-video"
+controls
+playsinline>
+
+<source src="katazahin.mp4" type="video/mp4">
+
+</video>
+
+</div>
+
+</div>
+
+<!-- ========================= -->
+<!-- VIDEO 2 -->
+<!-- ========================= -->
+
+<div class="modal" id="video2Modal">
+
+<div class="modal-content">
+
+<button class="close-btn" onclick="closeModal('video2Modal')">
+✕
+</button>
+
+<h2 class="modal-title">
+🎥 Cara
+</h2>
+
+<video
+class="vault-video"
+controls
+playsinline>
+
+<source src="cara.mp4" type="video/mp4">
+
+</video>
+
+</div>
+
+</div>
+
+<!-- ========================= -->
+<!-- PHOTO VIEWER -->
+<!-- ========================= -->
+
+<div class="modal" id="photoModal">
+
+<div class="modal-content">
+
+<button class="close-btn" onclick="closeModal('photoModal')">
+✕
+</button>
+
+<h2 class="modal-title">
+📸 Zahin
+</h2>
+
+<img
+src="zahin.jpg"
+class="vault-photo">
+
+</div>
+
+</div>
+
+<!-- ========================= -->
+<!-- SECRET LETTER -->
+<!-- ========================= -->
+
+<div class="modal" id="letterModal">
+
+<div class="modal-content letter-box">
+
+<button class="close-btn" onclick="closeModal('letterModal')">
+✕
+</button>
+
+<h2 class="modal-title">
+💌 Secret Letter
+</h2>
+
+<div class="envelope-area" onclick="openLetter()">
+
+<div class="envelope" id="envelope">
+📩
+</div>
+
+</div>
+
+<div id="letterContent" style="display:none;">
+
+<h3 class="letter-title">
+Untuk Putri ❤️
+</h3>
+
+<p class="letter-text" id="typedLetter">
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ========================= -->
+<!-- FINAL SECTION -->
+<!-- ========================= -->
+
+<section class="page" id="finalPage">
+
+<div class="glass">
+
+<h2 class="pin-title">
+✨ END OF VAULT
+</h2>
+
+<p class="subtitle">
+Terima kasih sudah membuka seluruh isi vault ini.
+<br><br>
+Semoga setiap foto, video, dan surat yang ada di sini bisa menjadi kenangan yang selalu membuatmu tersenyum.
+</p>
+
+<button
+class="neon-btn"
+onclick="sendWhatsApp()">
+
+💚 Kirim Balasan WhatsApp
+
+</button>
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- METEOR LAYER -->
+<!-- ========================= -->
+
+<div id="meteorLayer"></div>
+
+<!-- ========================= -->
+<!-- PARTICLE LAYER -->
+<!-- ========================= -->
+
+<div id="particleLayer"></div>
+
+<!-- ========================= -->
+<!-- CONFETTI -->
+<!-- ========================= -->
+
+<canvas
+id="confettiCanvas"
+style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+z-index:99999;
+display:none;">
+</canvas>
+
+<!-- ========================= -->
+<!-- AUDIO FX -->
+<!-- ========================= -->
+
+<audio id="successSound">
+
+<source
+src="suarahati.mp3"
+type="audio/mp3">
+
+</audio>
+
+<!-- ========================= -->
+<!-- JAVASCRIPT START -->
+<!-- ========================= -->
+
+<script>
+
+/* =========================
+   AURIA PRIVATE VAULT
+   CSS INJECTION ENGINE
+========================= */
+
+const extraStyle = document.createElement("style");
+
+extraStyle.innerHTML = `
+
+/* =========================
+   VAULT PAGE
+========================= */
+
+.vault-box{
+max-width:500px;
+overflow:hidden;
+}
+
+.orbit-scene{
+position:relative;
+width:320px;
+height:320px;
+margin:25px auto;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.crystal-heart{
+position:absolute;
+font-size:70px;
+z-index:10;
+animation:heartPulse 2s infinite;
+filter:drop-shadow(0 0 20px #ff4da6);
+}
+
+@keyframes heartPulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.15);}
+100%{transform:scale(1);}
+}
+
+.orbit-ring{
+position:relative;
+width:280px;
+height:280px;
+border-radius:50%;
+animation:orbitRotate 18s linear infinite;
+}
+
+@keyframes orbitRotate{
+from{
+transform:rotate(0deg);
+}
+to{
+transform:rotate(360deg);
+}
+}
+
+.orbit-item{
+position:absolute;
+width:80px;
+height:80px;
+border-radius:50%;
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(15px);
+border:1px solid rgba(255,255,255,.15);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+font-size:28px;
+transition:.4s;
+box-shadow:0 0 20px rgba(255,255,255,.08);
+}
+
+.orbit-item span{
+font-size:.65rem;
+margin-top:4px;
+}
+
+.orbit-item:hover{
+transform:scale(1.15);
+box-shadow:0 0 30px var(--cyan);
+}
+
+.orbit-item:nth-child(1){
+top:-10px;
+left:100px;
+}
+
+.orbit-item:nth-child(2){
+right:-10px;
+top:100px;
+}
+
+.orbit-item:nth-child(3){
+bottom:-10px;
+left:100px;
+}
+
+.orbit-item:nth-child(4){
+left:-10px;
+top:100px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+display:none;
+justify-content:center;
+align-items:center;
+padding:20px;
+background:rgba(0,0,0,.88);
+backdrop-filter:blur(15px);
+z-index:9999;
+}
+
+.modal.active{
+display:flex;
+}
+
+.modal-content{
+width:100%;
+max-width:700px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.1);
+border-radius:25px;
+padding:25px;
+backdrop-filter:blur(20px);
+position:relative;
+animation:modalShow .4s ease;
+}
+
+@keyframes modalShow{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.close-btn{
+position:absolute;
+right:15px;
+top:15px;
+width:40px;
+height:40px;
+border:none;
+border-radius:50%;
+cursor:pointer;
+font-size:18px;
+background:#ff4da6;
+color:white;
+}
+
+.modal-title{
+font-family:'Cinzel',serif;
+margin-bottom:20px;
+}
+
+.vault-video{
+width:100%;
+border-radius:20px;
+background:black;
+}
+
+.vault-photo{
+width:100%;
+border-radius:20px;
+box-shadow:
+0 0 20px rgba(255,255,255,.15),
+0 0 40px rgba(255,77,166,.2);
+}
+
+/* =========================
+   LETTER
+========================= */
+
+.letter-box{
+max-width:600px;
+}
+
+.envelope-area{
+display:flex;
+justify-content:center;
+margin-top:20px;
+cursor:pointer;
+}
+
+.envelope{
+font-size:90px;
+animation:bounceLetter 2s infinite;
+}
+
+@keyframes bounceLetter{
+0%{
+transform:translateY(0);
+}
+50%{
+transform:translateY(-10px);
+}
+100%{
+transform:translateY(0);
+}
+}
+
+.letter-title{
+font-family:'Cinzel',serif;
+margin-top:20px;
+margin-bottom:15px;
+color:#ff9ed1;
+}
+
+.letter-text{
+line-height:2;
+font-size:1rem;
+color:#f3f3f3;
+white-space:pre-wrap;
+}
+
+/* =========================
+   PARTICLES
+========================= */
+
+#particleLayer{
+position:fixed;
+inset:0;
+pointer-events:none;
+overflow:hidden;
+z-index:-2;
+}
+
+.particle{
+position:absolute;
+border-radius:50%;
+background:white;
+opacity:.4;
+animation:particleFloat linear infinite;
+}
+
+@keyframes particleFloat{
+from{
+transform:translateY(110vh);
+}
+to{
+transform:translateY(-20vh);
+}
+}
+
+/* =========================
+   METEOR
+========================= */
+
+#meteorLayer{
+position:fixed;
+inset:0;
+pointer-events:none;
+z-index:-1;
+overflow:hidden;
+}
+
+.meteor{
+position:absolute;
+width:180px;
+height:2px;
+background:
+linear-gradient(
+90deg,
+white,
+rgba(255,255,255,0)
+);
+transform:rotate(-35deg);
+animation:meteorFall linear forwards;
+}
+
+@keyframes meteorFall{
+from{
+transform:
+translateX(0)
+translateY(0)
+rotate(-35deg);
+opacity:1;
+}
+to{
+transform:
+translateX(-800px)
+translateY(800px)
+rotate(-35deg);
+opacity:0;
+}
+}
+
+/* =========================
+   SHAKE
+========================= */
+
+.shake{
+animation:shakeError .3s;
+}
+
+@keyframes shakeError{
+0%{transform:translateX(0);}
+20%{transform:translateX(-10px);}
+40%{transform:translateX(10px);}
+60%{transform:translateX(-10px);}
+80%{transform:translateX(10px);}
+100%{transform:translateX(0);}
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:480px){
+
+.orbit-scene{
+width:280px;
+height:280px;
+}
+
+.orbit-ring{
+width:240px;
+height:240px;
+}
+
+.orbit-item{
+width:70px;
+height:70px;
+font-size:24px;
+}
+
+.crystal-heart{
+font-size:58px;
+}
+
+.modal-content{
+padding:18px;
+}
+
+}
+
+`;
+
+document.head.appendChild(extraStyle);
+
+/* =========================
+   JAVASCRIPT PART 5
+   START BELOW
+========================= */
+
+/* =========================
+   LOADING ENGINE
+========================= */
+
+let loadingProgress = 0;
+
+window.addEventListener("DOMContentLoaded",()=>{
+
+createStars();
+createParticles();
+
+const loader = document.getElementById("loaderFill");
+
+const loadingInterval = setInterval(()=>{
+
+loadingProgress += Math.random()*15;
+
+if(loadingProgress >= 100){
+
+loadingProgress = 100;
+
+clearInterval(loadingInterval);
+
+setTimeout(()=>{
+
+showPage("pinPage");
+
+},700);
+
+}
+
+loader.style.width = loadingProgress + "%";
+
+},180);
+
+});
+
+/* =========================
+   PAGE ROUTER
+========================= */
+
+function showPage(id){
+
+document.querySelectorAll(".page")
+.forEach(page=>page.classList.remove("active"));
+
+document.getElementById(id)
+.classList.add("active");
+
+}
+
+/* =========================
+   MUSIC CONTROL
+========================= */
+
+const bgm =
+document.getElementById("bgm");
+
+function toggleMusic(){
+
+if(bgm.paused){
+
+bgm.play()
+.catch(()=>{});
+
+}else{
+
+bgm.pause();
+
+}
+
+}
+
+/* =========================
+   PIN SYSTEM
+========================= */
+
+let pinInput = "";
+
+const correctPin = "120408";
+
+function addPin(number){
+
+if(pinInput.length >= 6) return;
+
+pinInput += number;
+
+updatePinDots();
+
+if(pinInput.length === 6){
+
+checkPin();
+
+}
+
+}
+
+function clearPin(){
+
+pinInput = "";
+
+updatePinDots();
+
+}
+
+function updatePinDots(){
+
+const dots =
+document.querySelectorAll(".pin-dot");
+
+dots.forEach((dot,index)=>{
+
+if(index < pinInput.length){
+
+dot.classList.add("active");
+
+}else{
+
+dot.classList.remove("active");
+
+}
+
+});
+
+}
+
+function checkPin(){
+
+if(pinInput === correctPin){
+
+bgm.play().catch(()=>{});
+
+setTimeout(()=>{
+
+showPage("vaultPage");
+
+},500);
+
+}else{
+
+const box =
+document.querySelector("#pinPage .glass");
+
+box.classList.add("shake");
+
+setTimeout(()=>{
+
+box.classList.remove("shake");
+
+},500);
+
+alert("PIN salah 😝");
+
+clearPin();
+
+}
+
+}
+
+/* =========================
+   STARS ENGINE
+========================= */
+
+function createStars(){
+
+const stars =
+document.getElementById("stars");
+
+for(let i=0;i<120;i++){
+
+const star =
+document.createElement("div");
+
+star.className = "star";
+
+const size =
+Math.random()*3 + 1;
+
+star.style.width =
+size + "px";
+
+star.style.height =
+size + "px";
+
+star.style.left =
+Math.random()*100 + "%";
+
+star.style.top =
+Math.random()*100 + "%";
+
+star.style.animationDuration =
+(Math.random()*4+2) + "s";
+
+stars.appendChild(star);
+
+}
+
+}
+
+/* =========================
+   PARTICLE ENGINE
+========================= */
+
+function createParticles(){
+
+const layer =
+document.getElementById("particleLayer");
+
+for(let i=0;i<40;i++){
+
+const p =
+document.createElement("div");
+
+p.className = "particle";
+
+const size =
+Math.random()*5+2;
+
+p.style.width =
+size + "px";
+
+p.style.height =
+size + "px";
+
+p.style.left =
+Math.random()*100 + "%";
+
+p.style.animationDuration =
+(Math.random()*15+10)+"s";
+
+p.style.animationDelay =
+Math.random()*10+"s";
+
+layer.appendChild(p);
+
+}
+
+}
+
+/* =========================
+   METEOR SHOWER
+========================= */
+
+function createMeteor(){
+
+const meteor =
+document.createElement("div");
+
+meteor.className = "meteor";
+
+meteor.style.left =
+Math.random()*120 + "%";
+
+meteor.style.top =
+Math.random()*20 + "%";
+
+meteor.style.animationDuration =
+(Math.random()*2+1)+"s";
+
+document
+.getElementById("meteorLayer")
+.appendChild(meteor);
+
+setTimeout(()=>{
+
+meteor.remove();
+
+},3000);
+
+}
+
+setInterval(()=>{
+
+if(Math.random() > 0.55){
+
+createMeteor();
+
+}
+
+},1800);
+
+/* =========================
+   MODAL CONTROL
+========================= */
+
+function openModal(id){
+
+document
+.getElementById(id)
+.classList.add("active");
+
+}
+
+function closeModal(id){
+
+document
+.getElementById(id)
+.classList.remove("active");
+
+const videos =
+document
+.querySelectorAll("video");
+
+videos.forEach(video=>{
+
+video.pause();
+
+});
+
+}
+
+/* =========================
+   ORBIT CLICK SYSTEM
+========================= */
+
+document
+.querySelectorAll(".orbit-item")
+.forEach(item=>{
+
+item.addEventListener("click",()=>{
+
+const target =
+item.dataset.target;
+
+openModal(target);
+
+});
+
+});
+
+/* =========================
+   PREPARE PART 6
+========================= */
+
+/* =========================
+   LETTER SYSTEM
+========================= */
+
+const letterMessage =
+`Hai Putri ❤️
+
+Terima kasih sudah membuka seluruh isi vault ini.
+
+Mungkin website ini sederhana.
+Mungkin tidak sesempurna yang ada di pikiranku.
+
+Tapi setiap bagian yang ada di sini dibuat khusus untukmu.
+
+Setiap foto.
+Setiap video.
+Setiap animasi.
+
+Semuanya adalah bentuk effort kecil yang ingin menunjukkan bahwa kamu adalah seseorang yang sangat berarti.
+
+Terima kasih sudah hadir.
+
+Terima kasih sudah bertahan.
+
+Dan terima kasih sudah menjadi alasan mengapa banyak hari terasa lebih indah.
+
+❤️`;
+
+function openLetter(){
+
+document
+.getElementById("envelope")
+.style.display = "none";
+
+const content =
+document.getElementById("letterContent");
+
+content.style.display = "block";
+
+const target =
+document.getElementById("typedLetter");
+
+target.innerHTML = "";
+
+let i = 0;
+
+function type(){
+
+if(i < letterMessage.length){
+
+target.innerHTML += letterMessage.charAt(i);
+
+i++;
+
+setTimeout(type,35);
+
+}
+
+}
+
+type();
+
+}
+
+/* =========================
+   HEART RAIN
+========================= */
+
+function createHeart(){
+
+const heart =
+document.createElement("div");
+
+heart.innerHTML = "❤️";
+
+heart.style.position = "fixed";
+heart.style.left = Math.random()*100 + "vw";
+heart.style.top = "-30px";
+heart.style.fontSize = (Math.random()*18+18)+"px";
+heart.style.pointerEvents = "none";
+heart.style.zIndex = "999";
+
+document.body.appendChild(heart);
+
+const speed =
+Math.random()*3+2;
+
+let y = -30;
+
+const anim = setInterval(()=>{
+
+y += speed;
+
+heart.style.top = y + "px";
+
+if(y > window.innerHeight){
+
+heart.remove();
+clearInterval(anim);
+
+}
+
+},16);
+
+}
+
+setInterval(()=>{
+
+if(document.getElementById("vaultPage").classList.contains("active")){
+
+if(Math.random() > .65){
+
+createHeart();
+
+}
+
+}
+
+},800);
+
+/* =========================
+   CONFETTI
+========================= */
+
+const confettiCanvas =
+document.getElementById("confettiCanvas");
+
+const confettiCtx =
+confettiCanvas.getContext("2d");
+
+let confettiPieces = [];
+
+function launchConfetti(){
+
+confettiCanvas.style.display = "block";
+
+confettiCanvas.width =
+window.innerWidth;
+
+confettiCanvas.height =
+window.innerHeight;
+
+confettiPieces = [];
+
+for(let i=0;i<180;i++){
+
+confettiPieces.push({
+
+x:Math.random()*window.innerWidth,
+y:-20,
+r:Math.random()*6+4,
+vy:Math.random()*4+2,
+vx:(Math.random()-0.5)*4,
+color:`hsl(${Math.random()*360},100%,60%)`
+
+});
+
+}
+
+animateConfetti();
+
+}
+
+function animateConfetti(){
+
+confettiCtx.clearRect(
+0,
+0,
+confettiCanvas.width,
+confettiCanvas.height
+);
+
+let active = false;
+
+confettiPieces.forEach(c=>{
+
+c.x += c.vx;
+c.y += c.vy;
+
+if(c.y < window.innerHeight){
+
+active = true;
+
+}
+
+confettiCtx.fillStyle = c.color;
+
+confettiCtx.beginPath();
+
+confettiCtx.arc(
+c.x,
+c.y,
+c.r,
+0,
+Math.PI*2
+);
+
+confettiCtx.fill();
+
+});
+
+if(active){
+
+requestAnimationFrame(
+animateConfetti
+);
+
+}else{
+
+setTimeout(()=>{
+
+confettiCanvas.style.display =
+"none";
+
+},1000);
+
+}
+
+}
+
+/* =========================
+   WHATSAPP
+========================= */
+
+function sendWhatsApp(){
+
+launchConfetti();
+
+setTimeout(()=>{
+
+const phone =
+"6281378597056";
+
+const text =
+encodeURIComponent(
+"Terima kasih untuk effort dan kejutan manisnya yaaa 🥰"
+);
+
+window.location.href =
+`https://wa.me/${phone}?text=${text}`;
+
+},1200);
+
+}
+
+/* =========================
+   DOUBLE TAP PHOTO ZOOM
+========================= */
+
+const photo =
+document.querySelector(".vault-photo");
+
+if(photo){
+
+let zoomed = false;
+
+photo.addEventListener("click",()=>{
+
+zoomed = !zoomed;
+
+if(zoomed){
+
+photo.style.transform =
+"scale(1.8)";
+
+photo.style.transition =
+".4s";
+
+}else{
+
+photo.style.transform =
+"scale(1)";
+
+}
+
+});
+
+}
+
+/* =========================
+   AUTO ORBIT SPEED
+========================= */
+
+const orbit =
+document.querySelector(".orbit-ring");
+
+if(orbit){
+
+orbit.addEventListener("touchstart",()=>{
+
+orbit.style.animationDuration =
+"8s";
+
+});
+
+orbit.addEventListener("touchend",()=>{
+
+orbit.style.animationDuration =
+"18s";
+
+});
+
+}
+
+/* =========================
+   SECRET FINAL ACCESS
+========================= */
+
+let secretTap = 0;
+
+document
+.querySelector(".crystal-heart")
+?.addEventListener("click",()=>{
+
+secretTap++;
+
+if(secretTap >= 7){
+
+secretTap = 0;
+
+showPage("finalPage");
+
+}
+
+});
+
+/* =========================
+   RESPONSIVE FIX
+========================= */
+
+window.addEventListener("resize",()=>{
+
+confettiCanvas.width =
+window.innerWidth;
+
+confettiCanvas.height =
+window.innerHeight;
+
+});
+
+/* =========================
+   END OF SYSTEM
+========================= */
+
+</script>
+
+</body>
+</html>
