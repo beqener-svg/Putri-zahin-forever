@@ -341,15 +341,21 @@ Geser atau ketuk item untuk membuka memori rahasia.
 
 <div class="orbit-ring">
 
-<div class="orbit-item" data-target="video1Modal">
+<div class="orbit-item"
+onclick="window.open('LINK_GOOGLE_DRIVE_1','_blank')">
+
 🎬
 <span>Video 1</span>
+
 </div>
 
-<div class="orbit-item" data-target="video2Modal">
+<div class="orbit-item"
+onclick="window.open('LINK_GOOGLE_DRIVE_2','_blank')">
+
 🎥
 <span>Video 2</span>
-</div>
+
+</div>>
 
 <div class="orbit-item" data-target="photoModal">
 📸
@@ -372,8 +378,6 @@ Geser atau ketuk item untuk membuka memori rahasia.
 <!-- ========================= -->
 <!-- VIDEO 1 -->
 <!-- ========================= -->
-
-<div class="modal" id="video1Modal">
 
 <div class="modal-content">
 
@@ -401,8 +405,6 @@ playsinline>
 <!-- ========================= -->
 <!-- VIDEO 2 -->
 <!-- ========================= -->
-
-<div class="modal" id="video2Modal">
 
 <div class="modal-content">
 
@@ -1243,21 +1245,6 @@ video.pause();
 /* =========================
    ORBIT CLICK SYSTEM
 ========================= */
-
-document
-.querySelectorAll(".orbit-item")
-.forEach(item=>{
-
-item.addEventListener("click",()=>{
-
-const target =
-item.dataset.target;
-
-openModal(target);
-
-});
-
-});
 
 /* =========================
    PREPARE PART 6
